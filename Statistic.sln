@@ -13,6 +13,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Statistic.UnitTests", "Stat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Statistic.Api", "Statistic.Api\Statistic.Api.csproj", "{87E5A5F1-24F5-44BF-8F7D-8CC372790C74}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{562F905C-2CEA-4A88-B6EF-B10FD637BADF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared.Persistence.MongoDb", "..\Shared\Shared.Persistence.MongoDb\Shared.Persistence.MongoDb.csproj", "{30BDDBAF-B6C5-49FA-8001-791300DF10ED}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,9 +43,16 @@ Global
 		{87E5A5F1-24F5-44BF-8F7D-8CC372790C74}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{87E5A5F1-24F5-44BF-8F7D-8CC372790C74}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{87E5A5F1-24F5-44BF-8F7D-8CC372790C74}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30BDDBAF-B6C5-49FA-8001-791300DF10ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30BDDBAF-B6C5-49FA-8001-791300DF10ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30BDDBAF-B6C5-49FA-8001-791300DF10ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30BDDBAF-B6C5-49FA-8001-791300DF10ED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{30BDDBAF-B6C5-49FA-8001-791300DF10ED} = {562F905C-2CEA-4A88-B6EF-B10FD637BADF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F7677E45-7F95-4878-B7C7-B037078C2FC0}
