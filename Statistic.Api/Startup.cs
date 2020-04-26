@@ -10,6 +10,10 @@ using Statistic.Application.Statistic.GetUserStatistic;
 using Statistic.Persistence;
 using System;
 using System.Collections.Generic;
+using AutoMapper;
+using Shared.Persistence.MongoDb;
+using Statistic.Application.Infrastructure;
+using Statistic.Domain;
 
 namespace Statistic
 {
@@ -25,9 +29,10 @@ namespace Statistic
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddSingleton<StatisticDbContext>();
-            //services.AddScoped<IRepository<UserStatistic>, StatisticRepository>();
-            //services.AddAutoMapper(typeof(QuizProfile).Assembly);
+            services.AddSingleton<StatisticDbContext>();
+            services.AddScoped<IRepository<UserStatistic>, UserStatisticRepository>();
+            services.AddScoped<IRepository<QuizStatistic>, QuizStatisticRepository>();
+            services.AddAutoMapper(typeof(StatisticProfile).Assembly);
             services.AddMediatR(typeof(GetUserStatisticQueryHandler).Assembly);
 
             var identityUrl = Configuration["IdentityUrl"];
@@ -39,40 +44,7 @@ namespace Statistic
                     Title = "You api title",
                     Version = "v1"
                 });
-                //c.OperationFilter<AuthorizeCheckOperationFilter>();
-                c.AddSecurityDefinition("oauth2",
-                    new OpenApiSecurityScheme()
-                    {
-                        Type = SecuritySchemeType.OAuth2,
-                        Flows = new OpenApiOAuthFlows()
-                        {
-                            Implicit = new OpenApiOAuthFlow()
-                            {
-                                AuthorizationUrl = new Uri($"{identityUrl}/connect/authorize"),
-                                TokenUrl = new Uri($"{identityUrl}/connect/token"),
-                                Scopes = new Dictionary<string, string>
-                                {
-                                    {"StatisticApi", "Statistic API - full access"}
-                                },
-                            }
-                        }
-                    });
             });
-
-            //services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            //    .AddJwtBearer(options =>
-            //    {
-            //        // base-address of your identityserver
-            //        options.Authority = identityUrl;
-            //        options.RequireHttpsMetadata = false;
-            //        // name of the API resource
-            //        options.Audience = "QuizApi";
-            //        options.TokenValidationParameters.ValidIssuers = new[]
-            //        {
-            //            identityUrl
-            //        };
-            //    }).AddCookie();
-            services.AddAuthorization(options => { });
 
             services.AddControllers();
         }
@@ -89,13 +61,6 @@ namespace Statistic
 
             app.UseRouting();
 
-            app.UseCors(builder => builder
-                .SetIsOriginAllowed((host) => true)
-                .AllowAnyMethod()
-                .AllowAnyHeader()
-                .AllowCredentials()
-                .WithExposedHeaders("Content-Disposition"));
-
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
@@ -105,7 +70,6 @@ namespace Statistic
             });
 
             app.UseAuthentication();
-            //app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
