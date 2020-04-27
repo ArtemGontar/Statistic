@@ -1,19 +1,22 @@
+using AutoMapper;
+using GreenPipes;
+using MassTransit;
 using MediatR;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using Statistic.Application.Statistic.GetUserStatistic;
-using Statistic.Persistence;
-using System;
-using System.Collections.Generic;
-using AutoMapper;
 using Shared.Persistence.MongoDb;
 using Statistic.Application.Infrastructure;
+using Statistic.Application.Statistic.GetUserStatistic;
 using Statistic.Domain;
+using Statistic.Persistence;
+using System;
+using Statistic.Application.Consumers;
 
 namespace Statistic
 {
@@ -29,11 +32,42 @@ namespace Statistic
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<ConnectionStrings>(Configuration.GetSection(ConnectionStrings.SECTION_NAME));
+            services.Configure<HealthCheckPublisherOptions>(options =>
+            {
+                options.Delay = TimeSpan.FromSeconds(2);
+                options.Predicate = (check) => check.Tags.Contains("ready");
+            });
+
             services.AddSingleton<StatisticDbContext>();
             services.AddScoped<IRepository<UserStatistic>, UserStatisticRepository>();
             services.AddScoped<IRepository<QuizStatistic>, QuizStatisticRepository>();
+            
             services.AddAutoMapper(typeof(StatisticProfile).Assembly);
             services.AddMediatR(typeof(GetUserStatisticQueryHandler).Assembly);
+
+            services.AddMassTransit(x =>
+            {
+                x.AddConsumer<DeleteChapterConsumer>();
+
+                x.AddBus(provider => Bus.Factory.CreateUsingRabbitMq(cfg =>
+                {
+                    // configure health checks for this bus instance
+                    cfg.UseHealthCheck(provider);
+
+                    cfg.Host("rabbitmq://localhost");
+
+                    cfg.ReceiveEndpoint("delete-chapter", ep =>
+                    {
+                        ep.PrefetchCount = 16;
+                        ep.UseMessageRetry(r => r.Interval(2, 100));
+
+                        ep.ConfigureConsumer<DeleteChapterConsumer>(provider);
+                    });
+                }));
+            });
+            services.AddMassTransitHostedService();
+
 
             var identityUrl = Configuration["IdentityUrl"];
 
@@ -74,6 +108,17 @@ namespace Statistic
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+
+                endpoints.MapHealthChecks("/health/ready", new HealthCheckOptions()
+                {
+                    Predicate = (check) => check.Tags.Contains("ready"),
+                });
+
+                endpoints.MapHealthChecks("/health/live", new HealthCheckOptions()
+                {
+                    // Exclude all checks and return a 200-Ok.
+                    Predicate = (_) => false
+                });
             });
         }
     }

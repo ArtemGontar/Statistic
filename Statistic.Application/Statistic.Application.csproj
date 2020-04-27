@@ -5,10 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MassTransit" Version="6.2.5" />
     <PackageReference Include="MediatR" Version="8.0.1" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Shared\Shared.Bus.Messages\Shared.Bus.Messages.csproj" />
     <ProjectReference Include="..\Statistic.Domain\Statistic.Domain.csproj" />
   </ItemGroup>
 
