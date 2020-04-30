@@ -7,16 +7,14 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
-COPY ["Statistic/Statistic.csproj", "Statistic/"]
-RUN dotnet restore "Statistic/Statistic.csproj"
 COPY . .
-WORKDIR "/src/Statistic"
-RUN dotnet build "Statistic.csproj" -c Release -o /app/build
+WORKDIR "/src/Statistic.Api"
+RUN dotnet build "Statistic.Api.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Statistic.csproj" -c Release -o /app/publish
+RUN dotnet publish "Statistic.Api.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Statistic.dll"]
+ENTRYPOINT ["dotnet", "Statistic.Api.dll"]
