@@ -17,9 +17,10 @@ namespace Statistic.Api.Controllers
 
         private readonly IMediator _mediator;
 
-        public QuizStatisticsController(ILogger<QuizStatisticsController> logger)
+        public QuizStatisticsController(ILogger<QuizStatisticsController> logger, IMediator mediator)
         {
             _logger = logger;
+            _mediator = mediator;
         }
 
         [HttpGet]
