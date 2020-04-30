@@ -13,5 +13,4 @@ namespace Statistic.Application.Consumers
             await Console.Out.WriteLineAsync($"Delete chapter: {context.Message.ChapterId}");
         }
     }
-
 }
