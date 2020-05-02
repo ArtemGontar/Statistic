@@ -1,8 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Statistic.Application.QuizStatistic.GetQuizStatistic;
 using Statistic.Domain;
+using Statistic.Application.QuizStatistic.GetQuizStatistic;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Net;
 using System.Threading.Tasks;
