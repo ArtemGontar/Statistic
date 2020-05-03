@@ -85,6 +85,11 @@ namespace Statistic
                 });
             });
 
+            services.AddCors(options =>
+                options.AddPolicy("AllowAll", p => p.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()));
+
             services.AddControllers();
         }
 
@@ -98,6 +103,8 @@ namespace Statistic
 
             app.UseHttpsRedirection();
 
+
+            app.UseCors("AllowAll");
             app.UseRouting();
 
             app.UseSwagger();
