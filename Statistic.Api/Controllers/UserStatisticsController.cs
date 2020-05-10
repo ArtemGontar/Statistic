@@ -1,9 +1,11 @@
-﻿using System.Net;
+﻿using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Statistic.Application.Statistic.GetUserStatistic;
+using Statistic.Application.UserStatistic.GetUserStatistic;
 using Statistic.Domain;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -26,15 +28,33 @@ namespace Statistic.Api.Controllers
         [HttpGet]
         [Route("{userId:guid}")]
         [SwaggerOperation("Get statistic by user ID.")]
-        [SwaggerResponse((int)HttpStatusCode.OK, "Success.", typeof(UserStatistic))]
+        [SwaggerResponse((int)HttpStatusCode.OK, "Success.", typeof(IEnumerable<UserStatistic>))]
         [SwaggerResponse((int)HttpStatusCode.NotFound, "Statistic was not found.")]
         [SwaggerResponse((int)HttpStatusCode.InternalServerError, "Internal server error.")]
-        public async Task<IActionResult> Get([FromQuery] GetUserStatisticQuery query)
+        public async Task<IActionResult> Get([FromRoute] GetUserStatisticQuery query)
         {
             var response = await _mediator.Send(query);
             if (response == null)
             {
-                return NotFound($"Statistic for user with ID '{response.UserId}' was not found.");
+                return NotFound($"Statistic for user with ID '{query.UserId}' was not found.");
+            }
+
+            //catch if failure
+            return Ok(response);
+        }
+
+        [HttpGet]
+        [Route("{userId:guid}/qiuzzes/{quizId:guid}")]
+        [SwaggerOperation("Get statistic by user ID.")]
+        [SwaggerResponse((int)HttpStatusCode.OK, "Success.", typeof(IEnumerable<UserStatistic>))]
+        [SwaggerResponse((int)HttpStatusCode.NotFound, "Statistic was not found.")]
+        [SwaggerResponse((int)HttpStatusCode.InternalServerError, "Internal server error.")]
+        public async Task<IActionResult> Get([FromRoute] GetLastUserStatisticByQuizIdQuery query)
+        {
+            var response = await _mediator.Send(query);
+            if (response == null)
+            {
+                return NotFound($"Statistic for user with ID '{query.UserId}' and quiz id {query.QuizId} was not found.");
             }
 
             //catch if failure

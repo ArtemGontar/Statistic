@@ -18,6 +18,7 @@ using Statistic.Persistence;
 using System;
 using HealthChecks.UI.Client;
 using Statistic.Application.Consumers;
+using Statistic.Application.UserStatistic.GetUserStatistic;
 
 namespace Statistic
 {

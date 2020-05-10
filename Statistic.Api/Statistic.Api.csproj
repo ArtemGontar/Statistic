@@ -24,7 +24,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Statistic.Application\Statistic.Application.csproj" />
-    <ProjectReference Include="..\Statistic.Domain\Statistic.Domain.csproj" />
     <ProjectReference Include="..\Statistic.Persistence\Statistic.Persistence.csproj" />
   </ItemGroup>
 
