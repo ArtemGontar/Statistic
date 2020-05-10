@@ -6,16 +6,28 @@ using System.Threading.Tasks;
 namespace Statistic.Application.QuizStatistic.GetQuizStatistic
 {
     using Domain;
-    public class GetQuizStatisticQueryHandler : IRequestHandler<GetQuizStatisticQuery, QuizStatistic>
-    {
-        public GetQuizStatisticQueryHandler()
-        {
+    using global::Statistic.Application.QuizStatistic.Specifications;
+    using Shared.Persistence.MongoDb;
+    using System;
+    using System.Collections.Generic;
 
+    public class GetQuizStatisticQueryHandler : IRequestHandler<GetQuizStatisticQuery, IEnumerable<QuizStatistic>>
+    {
+        private readonly IRepository<QuizStatistic> _quizStatiticRepository;
+        public GetQuizStatisticQueryHandler(IRepository<QuizStatistic> quizStatiticRepository)
+        {
+            _quizStatiticRepository = quizStatiticRepository;
         }
 
-        public Task<QuizStatistic> Handle(GetQuizStatisticQuery request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<QuizStatistic>> Handle(GetQuizStatisticQuery request, CancellationToken cancellationToken)
         {
-            return Task.FromResult(new Domain.QuizStatistic());
+            var quizStatisticSpecification = new QuizStatisticByQuizIdSpecification(request.QuizId);
+            var quizStatistics = await _quizStatiticRepository.GetAllAsync(quizStatisticSpecification);
+            if (quizStatistics == null)
+            {
+                throw new ArgumentNullException($"Quiz statistic for quiz {request.QuizId} not found");
+            }
+            return quizStatistics;
         }
     }
 }

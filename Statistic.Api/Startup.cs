@@ -16,7 +16,9 @@ using Statistic.Application.Statistic.GetUserStatistic;
 using Statistic.Domain;
 using Statistic.Persistence;
 using System;
+using HealthChecks.UI.Client;
 using Statistic.Application.Consumers;
+using Statistic.Application.UserStatistic.GetUserStatistic;
 
 namespace Statistic
 {
@@ -68,6 +70,10 @@ namespace Statistic
             });
             services.AddMassTransitHostedService();
 
+            services.AddHealthChecks()
+                .AddCheck("self", () => HealthCheckResult.Healthy())
+                .AddMongoDb(Configuration.GetSection(ConnectionStrings.SECTION_NAME).Get<ConnectionStrings>().Mongo);
+
 
             var identityUrl = Configuration["IdentityUrl"];
 
@@ -79,6 +85,11 @@ namespace Statistic
                     Version = "v1"
                 });
             });
+
+            services.AddCors(options =>
+                options.AddPolicy("AllowAll", p => p.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()));
 
             services.AddControllers();
         }
@@ -93,6 +104,8 @@ namespace Statistic
 
             app.UseHttpsRedirection();
 
+
+            app.UseCors("AllowAll");
             app.UseRouting();
 
             app.UseSwagger();
@@ -107,7 +120,23 @@ namespace Statistic
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                endpoints.MapDefaultControllerRoute();
+
+                endpoints.MapHealthChecks("/hc", new HealthCheckOptions
+                {
+                    Predicate = _ => true,
+                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                });
+
+                endpoints.MapHealthChecks("/liveness", new HealthCheckOptions
+                {
+                    Predicate = r => r.Name.Contains("self")
+                });
+
+                endpoints.MapHealthChecks("/readiness", new HealthCheckOptions
+                {
+                    Predicate = r => !r.Name.Contains("self")
+                });
 
                 endpoints.MapHealthChecks("/health/ready", new HealthCheckOptions()
                 {

@@ -22,8 +22,14 @@ namespace Statistic.Persistence
                 entity.Id = Guid.NewGuid();
 
             var update = Update
-                .Set(x => x.Score, entity.Score)
-                .Set(x => x.QuizId, entity.QuizId);
+                .Set(x => x.QuizId, entity.QuizId)
+                .Set(x => x.QuestionsCount, entity.QuestionsCount)
+                .Set(x => x.CorrectAnswersCount, entity.CorrectAnswersCount)
+                .Set(x => x.WrongAnswersCount, entity.WrongAnswersCount)
+                .Set(x => x.CorrectPercent, entity.CorrectPercent)
+                .Set(x => x.TimeStamp, entity.TimeStamp)
+                .Set(x => x.UserId, entity.UserId)
+                ;
 
             var result = await Collection.UpdateOneAsync(FilterId(entity.Id), update, OptionUpsert);
 

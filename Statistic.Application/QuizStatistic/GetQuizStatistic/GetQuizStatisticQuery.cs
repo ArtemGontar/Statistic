@@ -3,7 +3,10 @@ using System;
 
 namespace Statistic.Application.QuizStatistic.GetQuizStatistic
 {
-    public class GetQuizStatisticQuery : IRequest<Domain.QuizStatistic>
+    using Domain;
+    using System.Collections.Generic;
+
+    public class GetQuizStatisticQuery : IRequest<IEnumerable<QuizStatistic>>
     {
         public Guid QuizId { get; set; }
     }

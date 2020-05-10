@@ -1,20 +1,33 @@
 ﻿using MediatR;
-using Statistic.Domain;
+using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Shared.Persistence.MongoDb;
 
-namespace Statistic.Application.Statistic.GetUserStatistic
+namespace Statistic.Application.UserStatistic.GetUserStatistic
 {
-    public class GetUserStatisticQueryHandler : IRequestHandler<GetUserStatisticQuery, UserStatistic>
+    using Domain;
+    using Application.UserStatistic.Specifications;
+
+    public class GetUserStatisticQueryHandler : IRequestHandler<GetUserStatisticQuery, IEnumerable<UserStatistic>>
     {
-        public GetUserStatisticQueryHandler()
+        private readonly IRepository<UserStatistic> _userStatiticRepository;
+
+        public GetUserStatisticQueryHandler(IRepository<UserStatistic> userStatiticRepository)
         {
-            
+            _userStatiticRepository = userStatiticRepository;
         }
 
-        public Task<UserStatistic> Handle(GetUserStatisticQuery request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<UserStatistic>> Handle(GetUserStatisticQuery request, CancellationToken cancellationToken)
         {
-            return Task.FromResult(new UserStatistic());
+            var userStatisticSpecification = new UserStatisticByUserIdSpecification(request.UserId);
+            var userStatistics = await _userStatiticRepository.GetAllAsync(userStatisticSpecification);
+            if (userStatistics == null)
+            {
+                throw new ArgumentNullException($"User statistic for user {request.UserId} not found");
+            }
+            return userStatistics;
         }
     }
 }
