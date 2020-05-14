@@ -48,50 +48,24 @@ namespace Statistic
             services.AddAutoMapper(typeof(StatisticProfile).Assembly);
             services.AddMediatR(typeof(GetUserStatisticQueryHandler).Assembly);
 
-            services.AddMassTransit(x =>
-            {
-                x.AddConsumer<DeleteChapterConsumer>();
-
-                x.AddBus(provider => Bus.Factory.CreateUsingRabbitMq(cfg =>
-                {
-                    // configure health checks for this bus instance
-                    cfg.UseHealthCheck(provider);
-
-                    cfg.Host("rabbitmq://localhost");
-
-                    cfg.ReceiveEndpoint("delete-chapter", ep =>
-                    {
-                        ep.PrefetchCount = 16;
-                        ep.UseMessageRetry(r => r.Interval(2, 100));
-
-                        ep.ConfigureConsumer<DeleteChapterConsumer>(provider);
-                    });
-                }));
-            });
-            services.AddMassTransitHostedService();
+            AppMassTransit(services);
 
             services.AddHealthChecks()
                 .AddCheck("self", () => HealthCheckResult.Healthy())
                 .AddMongoDb(Configuration.GetSection(ConnectionStrings.SECTION_NAME).Get<ConnectionStrings>().Mongo);
-
-
-            var identityUrl = Configuration["IdentityUrl"];
-
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo()
-                {
-                    Title = "You api title",
-                    Version = "v1"
-                });
-            });
 
             services.AddCors(options =>
                 options.AddPolicy("AllowAll", p => p.AllowAnyOrigin()
                     .AllowAnyMethod()
                     .AllowAnyHeader()));
 
-            services.AddControllers();
+            var identityUrl = Configuration["IdentityUrl"];
+
+            AppConfigureAuth(services, identityUrl);
+
+            AppConfigureSwagger(services);
+
+            services.AddControllersWithViews();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -104,19 +78,10 @@ namespace Statistic
 
             app.UseHttpsRedirection();
 
-
-            app.UseCors("AllowAll");
             app.UseRouting();
-
-            app.UseSwagger();
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Quiz API V1");
-                c.OAuthClientId("SwaggerId");
-                c.OAuthAppName("Swagger UI");
-            });
-
-            app.UseAuthentication();
+            app.UseCors("AllowAll");
+            UseConfigureAuth(app);
+            UseConfigureSwagger(app);
 
             app.UseEndpoints(endpoints =>
             {
@@ -148,6 +113,96 @@ namespace Statistic
                     // Exclude all checks and return a 200-Ok.
                     Predicate = (_) => false
                 });
+            });
+        }
+
+        protected virtual void AppConfigureAuth(IServiceCollection services, string identityUrl)
+        {
+            services.AddAuthentication("Bearer")
+                .AddJwtBearer(options =>
+                {
+                    options.Authority = identityUrl;
+                    options.RequireHttpsMetadata = false;
+                    options.Audience = "StaticticApi";
+                    options.TokenValidationParameters.ValidIssuers = new[]
+                    {
+                        identityUrl
+                    };
+                }).AddCookie();
+
+
+            services.AddAuthorization();
+        }
+
+        protected virtual void AppMassTransit(IServiceCollection services)
+        {
+            services.AddMassTransit(x =>
+            {
+                x.AddConsumer<DeleteChapterConsumer>();
+
+                x.AddBus(provider => Bus.Factory.CreateUsingRabbitMq(cfg =>
+                {
+                    // configure health checks for this bus instance
+                    cfg.UseHealthCheck(provider);
+
+                    cfg.Host("rabbitmq://localhost");
+
+                    cfg.ReceiveEndpoint("delete-chapter", ep =>
+                    {
+                        ep.PrefetchCount = 16;
+                        ep.UseMessageRetry(r => r.Interval(2, 100));
+
+                        ep.ConfigureConsumer<DeleteChapterConsumer>(provider);
+                    });
+                }));
+            });
+            services.AddMassTransitHostedService();
+        }
+
+        protected virtual void AppConfigureSwagger(IServiceCollection services)
+        {
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo()
+                {
+                    Title = "You api title",
+                    Version = "v1"
+                });
+                //c.OperationFilter<AuthorizeCheckOperationFilter>();
+                //c.AddSecurityDefinition("oauth2",
+                //    new OpenApiSecurityScheme()
+                //    {
+                //        Type = SecuritySchemeType.OAuth2,
+                //        Flows = new OpenApiOAuthFlows()
+                //        {
+                //            Implicit = new OpenApiOAuthFlow()
+                //            {
+                //                AuthorizationUrl = new Uri($"{identityUrl}/connect/authorize"),
+                //                TokenUrl = new Uri($"{identityUrl}/connect/token"),
+                //                Scopes = new Dictionary<string, string>
+                //                {
+                //                    {"QuizApi", "Quiz API - full access"}
+                //                },
+                //            }
+                //        }
+                //    });
+            });
+        }
+
+        protected virtual void UseConfigureAuth(IApplicationBuilder app)
+        {
+            app.UseAuthentication();
+            app.UseAuthorization();
+        }
+
+        protected virtual void UseConfigureSwagger(IApplicationBuilder app)
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Statistic API V1");
+                c.OAuthClientId("SwaggerId");
+                c.OAuthAppName("Swagger UI");
             });
         }
     }

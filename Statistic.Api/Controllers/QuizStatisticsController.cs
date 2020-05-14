@@ -8,9 +8,11 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Statistic.Application.Statistic.GetUserStatistic;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Statistic.Api.Controllers
 {
+    [Authorize]
     [Route("api/statistics/quizzes")]
     [ApiController]
     public class QuizStatisticsController : ControllerBase

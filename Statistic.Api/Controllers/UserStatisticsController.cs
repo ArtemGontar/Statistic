@@ -2,6 +2,7 @@
 using System.Net;
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Statistic.Application.Statistic.GetUserStatistic;
@@ -11,6 +12,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace Statistic.Api.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/statistics/users")]
     public class UserStatisticsController : ControllerBase
