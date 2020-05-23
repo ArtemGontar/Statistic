@@ -51,7 +51,7 @@ namespace Statistic.Api.Controllers
         [SwaggerResponse((int)HttpStatusCode.OK, "Success.", typeof(IEnumerable<UserStatistic>))]
         [SwaggerResponse((int)HttpStatusCode.NotFound, "Statistic was not found.")]
         [SwaggerResponse((int)HttpStatusCode.InternalServerError, "Internal server error.")]
-        public async Task<IActionResult> Get([FromRoute] GetLastUserStatisticByQuizIdQuery query)
+        public async Task<IActionResult> Get([FromRoute] GetUserStatisticByQuizQuery query)
         {
             var response = await _mediator.Send(query);
             if (response == null)

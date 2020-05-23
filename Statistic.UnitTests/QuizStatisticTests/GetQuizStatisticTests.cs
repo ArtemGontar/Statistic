@@ -4,11 +4,11 @@ using Shared.Persistence.MongoDb;
 using Statistic.Application.QuizStatistic.GetLastQuizUserStatistic;
 using Statistic.Application.QuizStatistic.GetLastUserQuizStatistic;
 using Statistic.Application.QuizStatistic.GetQuizStatistic;
+using Statistic.Application.Services;
+using Statistic.Application.Views;
 using Statistic.Domain;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
@@ -19,11 +19,13 @@ namespace Statistic.UnitTests.QuizStatisticTests
     {
         private AutoMocker _autoMocker;
         private readonly Mock<IRepository<QuizStatistic>> _quizStatisticRepositoryMock;
+        private readonly Mock<IQuizStatisticService> _quizStatisticServiceMock;
 
         public GetQuizStatisticTests()
         {
             _autoMocker = new AutoMocker();
             _quizStatisticRepositoryMock = _autoMocker.GetMock<IRepository<QuizStatistic>>();
+            _quizStatisticServiceMock = _autoMocker.GetMock<IQuizStatisticService>();
         }
 
         [Fact]
@@ -34,17 +36,14 @@ namespace Statistic.UnitTests.QuizStatisticTests
             var query = new GetQuizStatisticQuery() { QuizId = quizId };
             var handler = _autoMocker.CreateInstance<GetQuizStatisticQueryHandler>();
             _quizStatisticRepositoryMock.Setup(x => x.GetAllAsync(It.IsAny<ISpecification<QuizStatistic>>()))
-                .ReturnsAsync(new List<QuizStatistic>() {
-                    GetQuizStatistic(quizId, Guid.NewGuid(), 10, 5, 5, 0.5),
-                    GetQuizStatistic(quizId, Guid.NewGuid(), 10, 5, 5, 0.5),
-                    GetQuizStatistic(quizId, Guid.NewGuid(), 10, 5, 5, 0.5)
-                });
+                .ReturnsAsync(GetQuizStatisticList(quizId));
+            _quizStatisticServiceMock.Setup(x => x.GetQuizStatistics(It.IsAny<IEnumerable<QuizStatistic>>()))
+                .Returns(GetQuizStatisticView());
             //Act
             var result = await handler.Handle(query, CancellationToken.None);
 
             //Assert
             Assert.NotNull(result);
-            Assert.Equal(3, result.Count());
         }
 
         [Fact]
@@ -56,6 +55,7 @@ namespace Statistic.UnitTests.QuizStatisticTests
             var handler = _autoMocker.CreateInstance<GetQuizStatisticQueryHandler>();
             _quizStatisticRepositoryMock.Setup(x => x.GetAllAsync(It.IsAny<ISpecification<QuizStatistic>>()))
                 .ReturnsAsync(default(List<QuizStatistic>));
+            
             //Act
             var result = await Assert.ThrowsAsync<ArgumentNullException>(() => handler.Handle(query, CancellationToken.None));
 
@@ -69,25 +69,22 @@ namespace Statistic.UnitTests.QuizStatisticTests
             //Arrange
             var userId = Guid.NewGuid();
             var quizId = Guid.NewGuid();
-            var query = new GetLastQuizStatisticByUserIdQuery()
+            var query = new GetQuizStatisticByUserIdQuery()
             {
                 QuizId = quizId,
                 UserId = userId
             };
-            var handler = _autoMocker.CreateInstance<GetLastQuizStatisticByUserIdQueryHandler>();
+            var handler = _autoMocker.CreateInstance<GetQuizStatisticByUserIdQueryHandler>();
             _quizStatisticRepositoryMock.Setup(x => x.GetAllAsync(It.IsAny<ISpecification<QuizStatistic>>()))
-                .ReturnsAsync(new List<QuizStatistic>() {
-                    GetQuizStatistic(quizId, userId, 10, 5, 5, 0.5),
-                    GetQuizStatistic(quizId, userId, 10, 5, 5, 0.5),
-                    GetQuizStatistic(quizId, userId, 10, 5, 5, 0.5)
-                });
+                .ReturnsAsync(GetQuizStatisticList(quizId));
+            _quizStatisticServiceMock.Setup(x => x.GetQuizStatistic(It.IsAny<QuizStatistic>()))
+                .Returns(GetQuizStatisticView());
+
             //Act
             var result = await handler.Handle(query, CancellationToken.None);
 
             //Assert
             Assert.NotNull(result);
-            Assert.Equal(quizId, result.QuizId);
-            Assert.Equal(userId, result.UserId);
         }
 
         [Fact]
@@ -96,13 +93,13 @@ namespace Statistic.UnitTests.QuizStatisticTests
             //Arrange
             var userId = Guid.NewGuid();
             var quizId = Guid.NewGuid();
-            var query = new GetLastQuizStatisticByUserIdQuery()
+            var query = new GetQuizStatisticByUserIdQuery()
             {
 
                 QuizId = quizId,
                 UserId = userId
             };
-            var handler = _autoMocker.CreateInstance<GetLastQuizStatisticByUserIdQueryHandler>();
+            var handler = _autoMocker.CreateInstance<GetQuizStatisticByUserIdQueryHandler>();
             _quizStatisticRepositoryMock.Setup(x => x.GetAllAsync(It.IsAny<ISpecification<QuizStatistic>>()))
                 .ReturnsAsync(default(List<QuizStatistic>));
             //Act
@@ -112,6 +109,29 @@ namespace Statistic.UnitTests.QuizStatisticTests
             Assert.Contains($"Quiz statistic for quiz id {quizId} and user id {userId} not found", result.Message);
         }
 
+        private List<QuizStatistic> GetQuizStatisticList(Guid quizId)
+        {
+            return new List<QuizStatistic>() {
+                GetQuizStatistic(quizId, Guid.NewGuid(), 10, 5, 5, 0.5),
+                GetQuizStatistic(quizId, Guid.NewGuid(), 10, 5, 5, 0.5),
+                GetQuizStatistic(quizId, Guid.NewGuid(), 10, 5, 5, 0.5)
+            };
+        }
+
+        private QuizStatisticView GetQuizStatisticView()
+        {
+            return new QuizStatisticView()
+            {
+                PassedPercent = 2,
+                QuizResultChart = new QuizResultChartView()
+                {
+                    CorrectAnswers = 2,
+                    FaliedAnswers = 1,
+                    TotalAnswers = 3
+                },
+                TimeToSolved = new TimeSpan(1, 14, 18)
+            };
+        }
 
         private QuizStatistic GetQuizStatistic(Guid quizId, Guid userId, int questionsCount,
             int correctAnswersCount, int wrongAnswersCount, double correctPercent)
@@ -120,9 +140,9 @@ namespace Statistic.UnitTests.QuizStatisticTests
             {
                 QuizId = quizId,
                 UserId = userId,
-                QuestionsCount = questionsCount,
+                TotalAnswersCount = questionsCount,
                 CorrectAnswersCount = correctAnswersCount,
-                WrongAnswersCount = wrongAnswersCount,
+                FailedAnswersCount = wrongAnswersCount,
                 CorrectPercent = correctPercent,
                 TimeStamp = DateTime.UtcNow
             };

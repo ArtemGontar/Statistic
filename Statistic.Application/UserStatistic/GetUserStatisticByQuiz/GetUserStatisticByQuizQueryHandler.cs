@@ -4,22 +4,27 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Linq;
 using System;
+using Statistic.Application.Views;
+using Statistic.Application.Services;
+using Statistic.Application.UserStatistic.Specifications;
 
 namespace Statistic.Application.Statistic.GetUserStatistic
 {
     using Domain;
-    using Application.UserStatistic.Specifications;
-
-    public class GetLastUserStatisticByQuizIdQueryHandler : IRequestHandler<GetLastUserStatisticByQuizIdQuery, UserStatistic>
+    
+    public class GetUserStatisticByQuizQueryHandler : IRequestHandler<GetUserStatisticByQuizQuery, UserStatisticByQuizView>
     {
         private readonly IRepository<UserStatistic> _userStatiticRepository;
+        private readonly IUserStatisticService _userStatisticService;
 
-        public GetLastUserStatisticByQuizIdQueryHandler(IRepository<UserStatistic> userStatiticRepository)
+        public GetUserStatisticByQuizQueryHandler(IRepository<UserStatistic> userStatiticRepository,
+            IUserStatisticService userStatisticService)
         {
             _userStatiticRepository = userStatiticRepository;
+            _userStatisticService = userStatisticService;
         }
 
-        public async Task<UserStatistic> Handle(GetLastUserStatisticByQuizIdQuery request, CancellationToken cancellationToken)
+        public async Task<UserStatisticByQuizView> Handle(GetUserStatisticByQuizQuery request, CancellationToken cancellationToken)
         {
             var userStatisticSpecification = new UserStatisticByUserIdAndQuizIdSpecification(request.UserId, request.QuizId);
             var userStatistics = await _userStatiticRepository.GetAllAsync(userStatisticSpecification);
@@ -29,7 +34,9 @@ namespace Statistic.Application.Statistic.GetUserStatistic
             }
 
             var lastUserStatistic = userStatistics.OrderByDescending(x => x.TimeStamp).FirstOrDefault();
-            return lastUserStatistic;
+
+            var userStatisticByQiuzView = _userStatisticService.GetUserStatistic(lastUserStatistic);
+            return userStatisticByQiuzView;
         }
     }
 }

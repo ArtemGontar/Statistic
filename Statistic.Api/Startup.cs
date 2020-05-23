@@ -19,6 +19,7 @@ using System;
 using HealthChecks.UI.Client;
 using Statistic.Application.Consumers;
 using Statistic.Application.UserStatistic.GetUserStatistic;
+using Statistic.Application.Services;
 
 namespace Statistic
 {
@@ -44,7 +45,10 @@ namespace Statistic
             services.AddSingleton<StatisticDbContext>();
             services.AddScoped<IRepository<UserStatistic>, UserStatisticRepository>();
             services.AddScoped<IRepository<QuizStatistic>, QuizStatisticRepository>();
-            
+
+            services.AddScoped<IUserStatisticService, UserStatisticService>();
+            services.AddScoped<IQuizStatisticService, QuizStatisticService>();
+
             services.AddAutoMapper(typeof(StatisticProfile).Assembly);
             services.AddMediatR(typeof(GetUserStatisticQueryHandler).Assembly);
 

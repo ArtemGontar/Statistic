@@ -25,7 +25,7 @@ namespace Statistic.Persistence
                 .Set(x => x.UserId, entity.UserId)
                 .Set(x => x.QuestionsCount, entity.QuestionsCount)
                 .Set(x => x.CorrectAnswersCount, entity.CorrectAnswersCount)
-                .Set(x => x.WrongAnswersCount, entity.WrongAnswersCount)
+                .Set(x => x.FailedAnswersCount, entity.FailedAnswersCount)
                 .Set(x => x.CorrectPercent, entity.CorrectPercent)
                 .Set(x => x.TimeStamp, entity.TimeStamp)
                 .Set(x => x.QuizId, entity.QuizId);

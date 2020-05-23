@@ -1,12 +1,11 @@
 ﻿using MediatR;
+using Statistic.Application.Views;
+using System;
 
 namespace Statistic.Application.UserStatistic.GetUserStatistic
 {
-    using Domain;
-    using System;
-    using System.Collections.Generic;
 
-    public class GetUserStatisticQuery : IRequest<IEnumerable<UserStatistic>>
+    public class GetUserStatisticQuery : IRequest<UserStatisticView>
     {
         public Guid UserId { get; set; }
     }

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using Statistic.Application.Statistic.GetUserStatistic;
 using Microsoft.AspNetCore.Authorization;
+using Statistic.Application.Views;
 
 namespace Statistic.Api.Controllers
 {
@@ -30,7 +31,7 @@ namespace Statistic.Api.Controllers
         [HttpGet]
         [Route("{quizId:guid}")]
         [SwaggerOperation("Get statistic by quiz ID.")]
-        [SwaggerResponse((int)HttpStatusCode.OK, "Success.", typeof(IEnumerable<QuizStatistic>))]
+        [SwaggerResponse((int)HttpStatusCode.OK, "Success.", typeof(QuizStatisticView))]
         [SwaggerResponse((int)HttpStatusCode.NotFound, "Statistic was not found.")]
         [SwaggerResponse((int)HttpStatusCode.InternalServerError, "Internal server error.")]
         public async Task<IActionResult> Get([FromQuery] GetQuizStatisticQuery query)
@@ -46,12 +47,12 @@ namespace Statistic.Api.Controllers
         }
 
         [HttpGet]
-        [Route("{userId:guid}/qiuzzes/{quizId:guid}")]
+        [Route("{quizId:guid}/users/{userId:guid}")]
         [SwaggerOperation("Get statistic by user ID.")]
-        [SwaggerResponse((int)HttpStatusCode.OK, "Success.", typeof(QuizStatistic))]
+        [SwaggerResponse((int)HttpStatusCode.OK, "Success.", typeof(QuizStatisticView))]
         [SwaggerResponse((int)HttpStatusCode.NotFound, "Statistic was not found.")]
         [SwaggerResponse((int)HttpStatusCode.InternalServerError, "Internal server error.")]
-        public async Task<IActionResult> Get([FromRoute] GetLastUserStatisticByQuizIdQuery query)
+        public async Task<IActionResult> Get([FromRoute] GetUserStatisticByQuizQuery query)
         {
             var response = await _mediator.Send(query);
             if (response == null)
