@@ -143,6 +143,7 @@ namespace Statistic
             services.AddMassTransit(x =>
             {
                 x.AddConsumer<DeleteChapterConsumer>();
+                x.AddConsumer<QuizResultConsumer>();
 
                 x.AddBus(provider => Bus.Factory.CreateUsingRabbitMq(cfg =>
                 {
@@ -157,6 +158,14 @@ namespace Statistic
                         ep.UseMessageRetry(r => r.Interval(2, 100));
 
                         ep.ConfigureConsumer<DeleteChapterConsumer>(provider);
+                    });
+
+                    cfg.ReceiveEndpoint("quiz-result", ep =>
+                    {
+                        ep.PrefetchCount = 16;
+                        ep.UseMessageRetry(r => r.Interval(2, 100));
+
+                        ep.ConfigureConsumer<QuizResultConsumer>(provider);
                     });
                 }));
             });
