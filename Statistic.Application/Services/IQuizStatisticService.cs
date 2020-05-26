@@ -24,7 +24,7 @@ namespace Statistic.Application.Services
 
         public QuizStatisticView GetQuizStatistics(IEnumerable<QuizStatistic> quizStatistics)
         {
-            if (quizStatistics == null && !quizStatistics.Any())
+            if (quizStatistics == null || !quizStatistics.Any())
             {
                 return new QuizStatisticView();
             }

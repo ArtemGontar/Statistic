@@ -12,7 +12,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace Statistic.Api.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [ApiController]
     [Route("api/statistics/users")]
     public class UserStatisticsController : ControllerBase
@@ -46,7 +46,7 @@ namespace Statistic.Api.Controllers
         }
 
         [HttpGet]
-        [Route("{userId:guid}/qiuzzes/{quizId:guid}")]
+        [Route("{userId:guid}/quizzes/{quizId:guid}")]
         [SwaggerOperation("Get statistic by user ID.")]
         [SwaggerResponse((int)HttpStatusCode.OK, "Success.", typeof(IEnumerable<UserStatistic>))]
         [SwaggerResponse((int)HttpStatusCode.NotFound, "Statistic was not found.")]

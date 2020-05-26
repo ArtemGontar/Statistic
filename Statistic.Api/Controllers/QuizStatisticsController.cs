@@ -13,7 +13,7 @@ using Statistic.Application.Views;
 
 namespace Statistic.Api.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/statistics/quizzes")]
     [ApiController]
     public class QuizStatisticsController : ControllerBase
@@ -34,7 +34,7 @@ namespace Statistic.Api.Controllers
         [SwaggerResponse((int)HttpStatusCode.OK, "Success.", typeof(QuizStatisticView))]
         [SwaggerResponse((int)HttpStatusCode.NotFound, "Statistic was not found.")]
         [SwaggerResponse((int)HttpStatusCode.InternalServerError, "Internal server error.")]
-        public async Task<IActionResult> Get([FromQuery] GetQuizStatisticQuery query)
+        public async Task<IActionResult> Get([FromRoute] GetQuizStatisticQuery query)
         {
             var response = await _mediator.Send(query);
             if (response == null)

@@ -23,7 +23,7 @@ namespace Statistic.Application.Services
 
         public UserStatisticView GetUserStatistics(IEnumerable<UserStatistic> userStatistics, EnglishLevel englishLevel)
         {
-            if(userStatistics == null && !userStatistics.Any())
+            if(userStatistics == null || !userStatistics.Any())
             {
                 return new UserStatisticView()
                 {
