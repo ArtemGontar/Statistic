@@ -11,7 +11,7 @@ namespace Statistic.Application.Services
     public interface IUserStatisticService
     {
         UserStatisticView GetUserStatistics(IEnumerable<UserStatistic> userStatistics, EnglishLevel englishLevel);
-        UserStatisticByQuizView GetUserStatistic(UserStatistic userStatistic);
+        UserStatisticByQuizView GetUserStatistic(UserStatistic userStatistic, EnglishLevel englishLevel);
     }
 
     public class UserStatisticService : IUserStatisticService
@@ -37,7 +37,7 @@ namespace Statistic.Application.Services
                 EnglishLevel = englishLevel,
                 LastScoresChartView = new LastScoresChartView
                 {
-                    QuizScores = userStatistics.Take(5).Select(x => new QuizScoreView { QuizTitle = x.QuizTitle, Score = x.CorrectPercent })
+                    QuizScores = userStatistics.Take(5).Select(x => new QuizScoreView { Title = x.QuizTitle, Score = x.CorrectPercent })
                 },
                 QuizResultChartView = new QuizResultChartView
                 {
@@ -47,17 +47,19 @@ namespace Statistic.Application.Services
                 },
                 PassedPercent = userStatistics.Sum(x => x.CorrectPercent) / userStatistics.Count(),
                 TotalPassedQuestions = userStatistics.Sum(x => x.CorrectAnswersCount),
-                TotalFailedQuestions = userStatistics.Sum(x => x.FailedAnswersCount)
+                TotalFailedQuestions = userStatistics.Sum(x => x.FailedAnswersCount),
+
             };
             return userStatisticView;
         }
 
-        public UserStatisticByQuizView GetUserStatistic(UserStatistic userStatistic)
+        public UserStatisticByQuizView GetUserStatistic(UserStatistic userStatistic, EnglishLevel englishLevel)
         {
             var userStatisticView = new UserStatisticByQuizView()
             {
                 ScoreForQuiz = userStatistic.CorrectPercent,
                 TimeToSolved = new TimeSpan(1, 14, 18),
+                EnglishLevel = englishLevel,
                 QuizResultChartView = new QuizResultChartView
                 {
                     CorrectAnswers = userStatistic.CorrectAnswersCount,

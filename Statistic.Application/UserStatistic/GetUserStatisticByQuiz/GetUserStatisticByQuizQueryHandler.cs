@@ -7,6 +7,7 @@ using System;
 using Statistic.Application.Views;
 using Statistic.Application.Services;
 using Statistic.Application.UserStatistic.Specifications;
+using Shared.Common;
 
 namespace Statistic.Application.Statistic.GetUserStatistic
 {
@@ -35,7 +36,7 @@ namespace Statistic.Application.Statistic.GetUserStatistic
 
             var lastUserStatistic = userStatistics.OrderByDescending(x => x.TimeStamp).FirstOrDefault();
 
-            var userStatisticByQiuzView = _userStatisticService.GetUserStatistic(lastUserStatistic);
+            var userStatisticByQiuzView = _userStatisticService.GetUserStatistic(lastUserStatistic, EnglishLevel.Beginner);
             return userStatisticByQiuzView;
         }
     }

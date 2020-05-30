@@ -109,17 +109,17 @@ namespace Statistic.UnitTests.ServiceTests
                     {
                         new QuizScoreView
                         {
-                            QuizTitle = "anonymousTitle",
+                            Title = "anonymousTitle",
                             Score = 0.5
                         },
                         new QuizScoreView
                         {
-                            QuizTitle = "anonymousTitle",
+                            Title = "anonymousTitle",
                             Score = 0.5
                         },
                         new QuizScoreView
                         {
-                            QuizTitle = "anonymousTitle",
+                            Title = "anonymousTitle",
                             Score = 0.5
                         }
                     }

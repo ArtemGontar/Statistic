@@ -77,7 +77,7 @@ namespace Statistic.UnitTests.UserStatisticTests
             var handler = _autoMocker.CreateInstance<GetUserStatisticByQuizQueryHandler>();
             _userStatisticRepositoryMock.Setup(x => x.GetAllAsync(It.IsAny<ISpecification<UserStatistic>>()))
                 .ReturnsAsync(GetUserStatisticList(userId));
-            _userStatisticServiceMock.Setup(x => x.GetUserStatistic(It.IsAny<UserStatistic>()))
+            _userStatisticServiceMock.Setup(x => x.GetUserStatistic(It.IsAny<UserStatistic>(), It.IsAny<EnglishLevel>()))
                 .Returns(GetUserStatisticByQuizView());
 
             //Act

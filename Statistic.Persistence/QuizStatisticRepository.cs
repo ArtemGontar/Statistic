@@ -29,7 +29,7 @@ namespace Statistic.Persistence
                 .Set(x => x.CorrectPercent, entity.CorrectPercent)
                 .Set(x => x.TimeStamp, entity.TimeStamp)
                 .Set(x => x.UserId, entity.UserId)
-                ;
+                .Set(x => x.UserName, entity.UserName);
 
             var result = await Collection.UpdateOneAsync(FilterId(entity.Id), update, OptionUpsert);
 

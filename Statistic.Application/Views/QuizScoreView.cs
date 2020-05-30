@@ -2,7 +2,7 @@
 {
     public class QuizScoreView
     {
-        public string QuizTitle { get; set; }
+        public string Title { get; set; }
 
         public double Score { get; set; }
     }

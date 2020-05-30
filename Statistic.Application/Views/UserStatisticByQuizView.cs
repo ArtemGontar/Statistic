@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Shared.Common;
+using System;
 using System.Collections.Generic;
 using System.Text;
+using Shared.Common;
 
 namespace Statistic.Application.Views
 {
@@ -9,6 +11,8 @@ namespace Statistic.Application.Views
         public double ScoreForQuiz { get; set; }
 
         public TimeSpan TimeToSolved { get; set; }
+
+        public EnglishLevel EnglishLevel { get; set; }
 
         public QuizResultChartView QuizResultChartView { get; set; }
     }

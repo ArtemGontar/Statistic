@@ -123,7 +123,7 @@ namespace Statistic.UnitTests.QuizStatisticTests
             return new QuizStatisticView()
             {
                 PassedPercent = 2,
-                QuizResultChart = new QuizResultChartView()
+                QuizResultChartView = new QuizResultChartView()
                 {
                     CorrectAnswers = 2,
                     FaliedAnswers = 1,

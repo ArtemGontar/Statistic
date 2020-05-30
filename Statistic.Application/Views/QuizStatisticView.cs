@@ -6,6 +6,8 @@ namespace Statistic.Application.Views
     {
         public double PassedPercent { get; set; }
         public TimeSpan TimeToSolved { get; set; }
-        public QuizResultChartView QuizResultChart { get;set; }
+
+        public LastScoresChartView LastScoresChartView { get; set; } = new LastScoresChartView();
+        public QuizResultChartView QuizResultChartView { get; set; } = new QuizResultChartView();
     }
 }

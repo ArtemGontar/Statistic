@@ -31,12 +31,16 @@ namespace Statistic.Application.Services
             var quizStatisticView = new QuizStatisticView() { 
                 PassedPercent = quizStatistics.Sum(x => x.CorrectPercent) / quizStatistics.Count(),
                 TimeToSolved = new TimeSpan(1, 14, 18),
-                QuizResultChart = new QuizResultChartView
+                QuizResultChartView = new QuizResultChartView
                 {
                     CorrectAnswers = quizStatistics.Sum(x => x.CorrectAnswersCount),
                     FaliedAnswers = quizStatistics.Sum(x => x.FailedAnswersCount),
                     TotalAnswers = quizStatistics.Sum(x => x.TotalAnswersCount)
-                }
+                },
+                LastScoresChartView = new LastScoresChartView
+                {
+                    QuizScores = quizStatistics.Take(5).Select(x => new QuizScoreView { Title = x.UserName, Score = x.CorrectPercent })
+                },
             };
             return quizStatisticView;
         }
@@ -49,7 +53,7 @@ namespace Statistic.Application.Services
             {
                 PassedPercent = passedPercent,
                 TimeToSolved = timeToSolved,
-                QuizResultChart = new QuizResultChartView
+                QuizResultChartView = new QuizResultChartView
                 {
                     CorrectAnswers = quizStatistic.CorrectAnswersCount,
                     FaliedAnswers = quizStatistic.FailedAnswersCount,

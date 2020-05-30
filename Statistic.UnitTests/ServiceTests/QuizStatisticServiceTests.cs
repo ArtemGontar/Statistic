@@ -62,7 +62,7 @@ namespace Statistic.UnitTests.ServiceTests
             {
                 PassedPercent = 0.5,
                 TimeToSolved = new TimeSpan(1, 14, 18),
-                QuizResultChart = new QuizResultChartView()
+                QuizResultChartView = new QuizResultChartView()
                 {
                     CorrectAnswers = 15,
                     FaliedAnswers = 15,

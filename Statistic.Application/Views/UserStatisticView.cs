@@ -1,7 +1,4 @@
 ﻿using Shared.Common;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Statistic.Application.Views
 {
@@ -19,8 +16,8 @@ namespace Statistic.Application.Views
 
         public double PassedPercent { get; set; }
 
-        public LastScoresChartView LastScoresChartView { get; set; }
+        public LastScoresChartView LastScoresChartView { get; set; } = new LastScoresChartView();
 
-        public QuizResultChartView QuizResultChartView { get; set; }
+        public QuizResultChartView QuizResultChartView { get; set; } = new QuizResultChartView();
     }
 }

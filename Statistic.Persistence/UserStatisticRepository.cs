@@ -28,7 +28,8 @@ namespace Statistic.Persistence
                 .Set(x => x.FailedAnswersCount, entity.FailedAnswersCount)
                 .Set(x => x.CorrectPercent, entity.CorrectPercent)
                 .Set(x => x.TimeStamp, entity.TimeStamp)
-                .Set(x => x.QuizId, entity.QuizId);
+                .Set(x => x.QuizId, entity.QuizId)
+                .Set(x => x.QuizTitle, entity.QuizTitle);
 
 
             var result = await Collection.UpdateOneAsync(FilterId(entity.Id), update, OptionUpsert);
