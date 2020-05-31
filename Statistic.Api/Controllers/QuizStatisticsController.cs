@@ -1,15 +1,12 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Statistic.Domain;
 using Statistic.Application.QuizStatistic.GetQuizStatistic;
+using Statistic.Application.Statistic.GetUserStatistic;
+using Statistic.Application.Views;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Net;
 using System.Threading.Tasks;
-using System.Collections.Generic;
-using Statistic.Application.Statistic.GetUserStatistic;
-using Microsoft.AspNetCore.Authorization;
-using Statistic.Application.Views;
 
 namespace Statistic.Api.Controllers
 {

@@ -8,13 +8,11 @@
     <ProjectReference Include="..\Statistic.Domain\Statistic.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup Condition="'$(Configuration)' == 'Release'">
+    <PackageReference Include="Shared.Quiz.Persistence.MongoDb" Version="1.2.0" />
+  </ItemGroup>
 
   <ItemGroup Condition="'$(Configuration)' == 'Debug'">
     <ProjectReference Include="..\..\Shared\Shared.Persistence.MongoDb\Shared.Persistence.MongoDb.csproj" />
   </ItemGroup>
-
-  <ItemGroup Condition="'$(Configuration)' == 'Release'">
-    <PackageReference Include="Shared.Quiz.Persistence.MongoDb" Version="1.1.0" />
-  </ItemGroup>
-
 </Project>

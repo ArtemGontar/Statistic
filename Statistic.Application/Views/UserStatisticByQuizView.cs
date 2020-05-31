@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Shared.Common;
 
 namespace Statistic.Application.Views
 {

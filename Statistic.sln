@@ -19,6 +19,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Statistic.Api", "Statistic.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Statistic.Domain", "Statistic.Domain\Statistic.Domain.csproj", "{E184E45C-D278-4984-9D5C-7FD4800AF0F0}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared.Common", "..\Shared\Shared.Common\Shared.Common.csproj", "{A0909165-6FDF-4325-A35A-F52928DF8CAC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,10 @@ Global
 		{E184E45C-D278-4984-9D5C-7FD4800AF0F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E184E45C-D278-4984-9D5C-7FD4800AF0F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E184E45C-D278-4984-9D5C-7FD4800AF0F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0909165-6FDF-4325-A35A-F52928DF8CAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0909165-6FDF-4325-A35A-F52928DF8CAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0909165-6FDF-4325-A35A-F52928DF8CAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0909165-6FDF-4325-A35A-F52928DF8CAC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -60,6 +66,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{213A72F5-C396-4CD8-BC68-C8620052EBBD} = {562F905C-2CEA-4A88-B6EF-B10FD637BADF}
 		{5FD3B887-3452-4872-91EC-A90612B116FB} = {562F905C-2CEA-4A88-B6EF-B10FD637BADF}
+		{A0909165-6FDF-4325-A35A-F52928DF8CAC} = {562F905C-2CEA-4A88-B6EF-B10FD637BADF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F7677E45-7F95-4878-B7C7-B037078C2FC0}
