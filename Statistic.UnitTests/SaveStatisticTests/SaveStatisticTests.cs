@@ -18,17 +18,5 @@ namespace Statistic.UnitTests.SaveStatisticTests
             _consumer = _autoMocker.CreateInstance<QuizResultConsumer>();
 
         }
-
-        [Fact(Skip = "investigate how to test conumer")]
-        public void Consume_ValidData_ShouldSuccess()
-        {
-            //Arrange
-            //var context = ConsumeContext<QuizResultMessage>
-
-            //Act
-            //await _consumer.Consume();
-
-            //Assert
-        }
     }
 }

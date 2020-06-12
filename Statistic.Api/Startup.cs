@@ -20,6 +20,10 @@ using HealthChecks.UI.Client;
 using Statistic.Application.Consumers;
 using Statistic.Application.UserStatistic.GetUserStatistic;
 using Statistic.Application.Services;
+using OpenTracing;
+using Jaeger;
+using Jaeger.Samplers;
+using OpenTracing.Util;
 
 namespace Statistic
 {
@@ -53,6 +57,23 @@ namespace Statistic
             services.AddMediatR(typeof(GetUserStatisticQueryHandler).Assembly);
 
             AppMassTransit(services);
+
+            services.AddOpenTracing();
+
+            services.AddSingleton<ITracer>(serviceProvider =>
+            {
+                string serviceName = serviceProvider.GetRequiredService<IWebHostEnvironment>().ApplicationName;
+
+                // This will log to a default localhost installation of Jaeger.
+                var tracer = new Tracer.Builder(serviceName)
+                    .WithSampler(new ConstSampler(true))
+                    .Build();
+
+                // Allows code that can't use DI to also access the tracer.
+                GlobalTracer.Register(tracer);
+
+                return tracer;
+            });
 
             services.AddHealthChecks()
                 .AddCheck("self", () => HealthCheckResult.Healthy())

@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using OpenTracing;
 using Statistic.Application.QuizStatistic.GetQuizStatistic;
 using Statistic.Application.Statistic.GetUserStatistic;
 using Statistic.Application.Views;
@@ -16,13 +17,16 @@ namespace Statistic.Api.Controllers
     public class QuizStatisticsController : ControllerBase
     {
         private readonly ILogger<QuizStatisticsController> _logger;
-
         private readonly IMediator _mediator;
+        private readonly ITracer _tracer;
 
-        public QuizStatisticsController(ILogger<QuizStatisticsController> logger, IMediator mediator)
+        public QuizStatisticsController(ILogger<QuizStatisticsController> logger, 
+            IMediator mediator,
+            ITracer tracer)
         {
             _logger = logger;
             _mediator = mediator;
+            _tracer = tracer;
         }
 
         [HttpGet]
@@ -33,14 +37,18 @@ namespace Statistic.Api.Controllers
         [SwaggerResponse((int)HttpStatusCode.InternalServerError, "Internal server error.")]
         public async Task<IActionResult> Get([FromRoute] GetQuizStatisticQuery query)
         {
-            var response = await _mediator.Send(query);
-            if (response == null)
+            using (var scope = _tracer.BuildSpan("GetQuizStatisticByQuizId").StartActive(finishSpanOnDispose: true))
             {
-                return NotFound($"Statistic for quiz with ID '{query.QuizId}' was not found.");
-            }
+                var response = await _mediator.Send(query);
+                if (response == null)
+                {
+                    return NotFound($"Statistic for quiz with ID '{query.QuizId}' was not found.");
+                }
 
-            //catch if failure
-            return Ok(response);
+                //catch if failure
+                return Ok(response);
+            }
+            
         }
 
         [HttpGet]
@@ -51,14 +59,17 @@ namespace Statistic.Api.Controllers
         [SwaggerResponse((int)HttpStatusCode.InternalServerError, "Internal server error.")]
         public async Task<IActionResult> Get([FromRoute] GetUserStatisticByQuizQuery query)
         {
-            var response = await _mediator.Send(query);
-            if (response == null)
+            using (var scope = _tracer.BuildSpan("GetQuizStatisticByUserId").StartActive(finishSpanOnDispose: true))
             {
-                return NotFound($"Statistic for user with ID '{query.UserId}' and quiz id {query.QuizId} was not found.");
-            }
+                var response = await _mediator.Send(query);
+                if (response == null)
+                {
+                    return NotFound($"Statistic for user with ID '{query.UserId}' and quiz id {query.QuizId} was not found.");
+                }
 
-            //catch if failure
-            return Ok(response);
+                //catch if failure
+                return Ok(response);
+            }
         }
     }
 }
