@@ -48,7 +48,6 @@ namespace Statistic.Api.Controllers
                 //catch if failure
                 return Ok(response);
             }
-            
         }
 
         [HttpGet]

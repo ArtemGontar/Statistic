@@ -6,7 +6,7 @@ namespace Statistic.Application.Views
     {
         public int TotalPassedQuizzes { get; set; }
 
-        public double ScoreForQuizzes { get; set; }
+        public decimal ScoreForQuizzes { get; set; }
 
         public EnglishLevel EnglishLevel { get; set; }
 
@@ -14,7 +14,7 @@ namespace Statistic.Application.Views
 
         public int TotalFailedQuestions { get; set; }
 
-        public double PassedPercent { get; set; }
+        public decimal PassedPercent { get; set; }
 
         public LastScoresChartView LastScoresChartView { get; set; } = new LastScoresChartView();
 

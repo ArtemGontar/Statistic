@@ -7,9 +7,9 @@ namespace Statistic.Application.Views
 {
     public class UserStatisticByQuizView
     {
-        public double ScoreForQuiz { get; set; }
+        public decimal ScoreForQuiz { get; set; }
 
-        public TimeSpan TimeToSolved { get; set; }
+        public string TimeToSolved { get; set; }
 
         public EnglishLevel EnglishLevel { get; set; }
 

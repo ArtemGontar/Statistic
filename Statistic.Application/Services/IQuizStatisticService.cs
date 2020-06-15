@@ -29,8 +29,8 @@ namespace Statistic.Application.Services
                 return new QuizStatisticView();
             }
             var quizStatisticView = new QuizStatisticView() { 
-                PassedPercent = quizStatistics.Sum(x => x.CorrectPercent) / quizStatistics.Count(),
-                TimeToSolved = new TimeSpan(1, 14, 18),
+                PassedPercent = decimal.Round((quizStatistics.Sum(x => x.CorrectPercent) / quizStatistics.Count()) * 100),
+                TimeToSolved = new TimeSpan(1, 14, 18).ToString(),
                 QuizResultChartView = new QuizResultChartView
                 {
                     CorrectAnswers = quizStatistics.Sum(x => x.CorrectAnswersCount),
@@ -52,7 +52,7 @@ namespace Statistic.Application.Services
             var quizStatisticView = new QuizStatisticView()
             {
                 PassedPercent = passedPercent,
-                TimeToSolved = timeToSolved,
+                TimeToSolved = timeToSolved.ToString(),
                 QuizResultChartView = new QuizResultChartView
                 {
                     CorrectAnswers = quizStatistic.CorrectAnswersCount,

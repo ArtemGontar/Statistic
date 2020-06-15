@@ -33,7 +33,7 @@ namespace Statistic.Application.Services
             var userStatisticView = new UserStatisticView()
             {
                 TotalPassedQuizzes = userStatistics.Select(x => x.QuizId).Distinct().Count(),
-                ScoreForQuizzes = userStatistics.Sum(x => x.CorrectPercent) / userStatistics.Count(),
+                ScoreForQuizzes = decimal.Round((userStatistics.Sum(x => x.CorrectPercent) / userStatistics.Count()) * 100),
                 EnglishLevel = englishLevel,
                 LastScoresChartView = new LastScoresChartView
                 {
@@ -45,7 +45,7 @@ namespace Statistic.Application.Services
                     FaliedAnswers = userStatistics.Sum(x => x.FailedAnswersCount),
                     TotalAnswers = userStatistics.Sum(x => x.QuestionsCount)
                 },
-                PassedPercent = userStatistics.Sum(x => x.CorrectPercent) / userStatistics.Count(),
+                PassedPercent = decimal.Round((userStatistics.Sum(x => x.CorrectAnswersCount) / userStatistics.Sum(x => x.FailedAnswersCount)) * 100),
                 TotalPassedQuestions = userStatistics.Sum(x => x.CorrectAnswersCount),
                 TotalFailedQuestions = userStatistics.Sum(x => x.FailedAnswersCount),
 
@@ -57,8 +57,8 @@ namespace Statistic.Application.Services
         {
             var userStatisticView = new UserStatisticByQuizView()
             {
-                ScoreForQuiz = userStatistic.CorrectPercent,
-                TimeToSolved = new TimeSpan(1, 14, 18),
+                ScoreForQuiz = decimal.Round(userStatistic.CorrectPercent * 100),
+                TimeToSolved = new TimeSpan(1, 14, 18).ToString(),
                 EnglishLevel = englishLevel,
                 QuizResultChartView = new QuizResultChartView
                 {
