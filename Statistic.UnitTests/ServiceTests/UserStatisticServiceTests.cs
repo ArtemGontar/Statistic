@@ -56,14 +56,14 @@ namespace Statistic.UnitTests.ServiceTests
         {
             return new List<UserStatistic>()
             {
-                GetUserStatistic(userId, Guid.NewGuid(), quizTitle, questionsCount: 10, correctAnswersCount: 5, failedAnswersCount: 5, correctPercent: 0.5),
-                GetUserStatistic(userId, Guid.NewGuid(), quizTitle, questionsCount: 10, correctAnswersCount: 5, failedAnswersCount: 5, correctPercent: 0.5),
-                GetUserStatistic(userId, Guid.NewGuid(), quizTitle, questionsCount: 10, correctAnswersCount: 5, failedAnswersCount: 5, correctPercent: 0.5)
+                GetUserStatistic(userId, Guid.NewGuid(), quizTitle, questionsCount: 10, correctAnswersCount: 5, failedAnswersCount: 5, correctPercent: 0.5m),
+                GetUserStatistic(userId, Guid.NewGuid(), quizTitle, questionsCount: 10, correctAnswersCount: 5, failedAnswersCount: 5, correctPercent: 0.5m),
+                GetUserStatistic(userId, Guid.NewGuid(), quizTitle, questionsCount: 10, correctAnswersCount: 5, failedAnswersCount: 5, correctPercent: 0.5m)
             };
         }
 
         private UserStatistic GetUserStatistic(Guid userId, Guid quizId, string quizTitle, int questionsCount,
-            int correctAnswersCount, int failedAnswersCount, double correctPercent)
+            int correctAnswersCount, int failedAnswersCount, decimal correctPercent)
         {
             return new UserStatistic()
             {
@@ -82,8 +82,8 @@ namespace Statistic.UnitTests.ServiceTests
         {
             return new UserStatisticByQuizView()
             {
-                ScoreForQuiz = 0.5,
-                TimeToSolved = new TimeSpan(1, 14, 18),
+                ScoreForQuiz = 0.5m,
+                TimeToSolved = new TimeSpan(1, 14, 18).ToString(),
                 QuizResultChartView = new QuizResultChartView()
                 {
                     CorrectAnswers = 1,
@@ -98,8 +98,8 @@ namespace Statistic.UnitTests.ServiceTests
             return new UserStatisticView()
             {
                 EnglishLevel = EnglishLevel.Beginner,
-                PassedPercent = 0.5,
-                ScoreForQuizzes = 0.5,
+                PassedPercent = 0.5m,
+                ScoreForQuizzes = 0.5m,
                 TotalFailedQuestions = 15,
                 TotalPassedQuestions = 15,
                 TotalPassedQuizzes = 3,
@@ -110,17 +110,17 @@ namespace Statistic.UnitTests.ServiceTests
                         new QuizScoreView
                         {
                             Title = "anonymousTitle",
-                            Score = 0.5
+                            Score = 0.5m
                         },
                         new QuizScoreView
                         {
                             Title = "anonymousTitle",
-                            Score = 0.5
+                            Score = 0.5m
                         },
                         new QuizScoreView
                         {
                             Title = "anonymousTitle",
-                            Score = 0.5
+                            Score = 0.5m
                         }
                     }
                 },

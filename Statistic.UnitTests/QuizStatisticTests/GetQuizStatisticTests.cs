@@ -112,9 +112,9 @@ namespace Statistic.UnitTests.QuizStatisticTests
         private List<QuizStatistic> GetQuizStatisticList(Guid quizId)
         {
             return new List<QuizStatistic>() {
-                GetQuizStatistic(quizId, Guid.NewGuid(), 10, 5, 5, 0.5),
-                GetQuizStatistic(quizId, Guid.NewGuid(), 10, 5, 5, 0.5),
-                GetQuizStatistic(quizId, Guid.NewGuid(), 10, 5, 5, 0.5)
+                GetQuizStatistic(quizId, Guid.NewGuid(), 10, 5, 5, 0.5m),
+                GetQuizStatistic(quizId, Guid.NewGuid(), 10, 5, 5, 0.5m),
+                GetQuizStatistic(quizId, Guid.NewGuid(), 10, 5, 5, 0.5m)
             };
         }
 
@@ -129,12 +129,12 @@ namespace Statistic.UnitTests.QuizStatisticTests
                     FaliedAnswers = 1,
                     TotalAnswers = 3
                 },
-                TimeToSolved = new TimeSpan(1, 14, 18)
+                TimeToSolved = new TimeSpan(1, 14, 18).ToString()
             };
         }
 
         private QuizStatistic GetQuizStatistic(Guid quizId, Guid userId, int questionsCount,
-            int correctAnswersCount, int wrongAnswersCount, double correctPercent)
+            int correctAnswersCount, int wrongAnswersCount, decimal correctPercent)
         {
             return new QuizStatistic()
             {

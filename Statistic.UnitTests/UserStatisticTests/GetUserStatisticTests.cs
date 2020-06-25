@@ -112,9 +112,9 @@ namespace Statistic.UnitTests.UserStatisticTests
         {
             return new List<UserStatistic>()
             {
-                GetUserStatistic(userId, Guid.NewGuid(), 10, 5, 5, 0.5),
-                GetUserStatistic(userId, Guid.NewGuid(), 10, 5, 5, 0.5),
-                GetUserStatistic(userId, Guid.NewGuid(), 10, 5, 5, 0.5)
+                GetUserStatistic(userId, Guid.NewGuid(), 10, 5, 5, 0.5m),
+                GetUserStatistic(userId, Guid.NewGuid(), 10, 5, 5, 0.5m),
+                GetUserStatistic(userId, Guid.NewGuid(), 10, 5, 5, 0.5m)
             };
         }
 
@@ -124,7 +124,7 @@ namespace Statistic.UnitTests.UserStatisticTests
             {
                 EnglishLevel = EnglishLevel.Beginner,
                 PassedPercent = 2,
-                ScoreForQuizzes = 2.0,
+                ScoreForQuizzes = 2.0m,
                 TotalFailedQuestions = 2,
                 TotalPassedQuestions = 1,
                 TotalPassedQuizzes = 1,
@@ -146,7 +146,7 @@ namespace Statistic.UnitTests.UserStatisticTests
             return new UserStatisticByQuizView()
             {
                 ScoreForQuiz = 2,
-                TimeToSolved = new TimeSpan(1, 14, 18),
+                TimeToSolved = new TimeSpan(1, 14, 18).ToString(),
                 QuizResultChartView = new QuizResultChartView()
                 {
                     CorrectAnswers = 1,
@@ -157,7 +157,7 @@ namespace Statistic.UnitTests.UserStatisticTests
         }
 
         private UserStatistic GetUserStatistic(Guid userId, Guid quizId, int questionsCount,
-            int correctAnswersCount, int wrongAnswersCount, double correctPercent)
+            int correctAnswersCount, int wrongAnswersCount, decimal correctPercent)
         {
             return new UserStatistic() {
                 UserId = userId,
