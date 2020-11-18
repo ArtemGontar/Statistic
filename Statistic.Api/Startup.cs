@@ -56,7 +56,7 @@ namespace Statistic
             services.AddAutoMapper(typeof(StatisticProfile).Assembly);
             services.AddMediatR(typeof(GetUserStatisticQueryHandler).Assembly);
 
-            AppMassTransit(services);
+            AddMassTransit(services);
 
             services.AddOpenTracing();
 
@@ -159,8 +159,9 @@ namespace Statistic
             services.AddAuthorization();
         }
 
-        protected virtual void AppMassTransit(IServiceCollection services)
+        protected virtual void AddMassTransit(IServiceCollection services)
         {
+            var rabbitMqHost = Configuration["RabbitMqHost"];
             services.AddMassTransit(x =>
             {
                 x.AddConsumer<DeleteChapterConsumer>();
@@ -171,7 +172,7 @@ namespace Statistic
                     // configure health checks for this bus instance
                     cfg.UseHealthCheck(provider);
 
-                    cfg.Host("rabbitmq://localhost");
+                    cfg.Host(rabbitMqHost);
 
                     cfg.ReceiveEndpoint("delete-chapter", ep =>
                     {
