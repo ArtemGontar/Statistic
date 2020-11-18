@@ -1,10 +1,11 @@
-﻿using System;
-using MediatR;
-using Statistic.Domain;
+﻿using MediatR;
+using Statistic.Application.Views;
+using System;
 
-namespace Statistic.Application.Statistic.GetUserStatistic
+namespace Statistic.Application.UserStatistic.GetUserStatistic
 {
-    public class GetUserStatisticQuery : IRequest<UserStatistic>
+
+    public class GetUserStatisticQuery : IRequest<UserStatisticView>
     {
         public Guid UserId { get; set; }
     }
